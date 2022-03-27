@@ -12,7 +12,7 @@ export default function Profile(props){
     async function getTodo(){
         if(!loading){
           setLoading(true);
-          fetch(process.env.REACT_APP_BACKEND_HOST + ':' + process.env.REACT_APP_BACKEND_PORT + '/todos', {
+          fetch('http://localhost:3001/todos', {
             method: 'POST',
             headers: {
               Accept: 'application/json',

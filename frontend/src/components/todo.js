@@ -9,7 +9,7 @@ export default function Todo(props) {
     async function deleteTodo(){
         if(!loading){
           setLoading(true);
-          fetch(process.env.REACT_APP_BACKEND_HOST + ':' + process.env.REACT_APP_BACKEND_PORT + '/delete', {
+          fetch('http://localhost:3001/delete', {
             method: 'POST',
             headers: {
               Accept: 'application/json',
@@ -22,7 +22,7 @@ export default function Todo(props) {
           })
             .then((response) => response.json())
             .then(async (json) => {
-                console.log(json)
+              console.log(json)
             })
             .catch((error) => {
               console.error(error);
@@ -32,7 +32,8 @@ export default function Todo(props) {
       }
 
     function handleSubmit(event) {
-        deleteTodo()
+        deleteTodo();
+        props.refresh();
         event.preventDefault();
     }
 

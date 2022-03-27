@@ -16,7 +16,7 @@ export default function Login() {
   async function singIn(){
     if(!loading){
       setLoading(true);
-      fetch(process.env.REACT_APP_BACKEND_HOST + ':' + process.env.REACT_APP_BACKEND_PORT + '/login', {
+      fetch('http://localhost:3001/login', {
         method: 'POST',
         headers: {
           Accept: 'application/json',

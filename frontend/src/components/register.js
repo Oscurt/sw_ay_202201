@@ -15,7 +15,7 @@ export default function Register() {
   async function singUp(){
     if(!loading){
       setLoading(true);
-      fetch(process.env.REACT_APP_BACKEND_HOST + ':' + process.env.REACT_APP_BACKEND_PORT + '/register', {
+      fetch('http://localhost:3001/register', {
         method: 'POST',
         headers: {
           Accept: 'application/json',

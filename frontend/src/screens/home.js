@@ -15,10 +15,14 @@ export default function Home(){
         return title.length > 0 && desc.length > 0;
     }
 
+    function refresh(){
+      console.log("aca refrescando xd");
+    }
+
     async function getTodo(){
         if(!loading){
           setLoading(true);
-          fetch(process.env.REACT_APP_BACKEND_HOST + ':' + process.env.REACT_APP_BACKEND_PORT + '/todos', {
+          fetch('http://localhost:3001/todos', {
             method: 'POST',
             headers: {
               Accept: 'application/json',
@@ -33,7 +37,7 @@ export default function Home(){
                 var output = [];
                 console.log(json)
                 for(var i = 0; i < json.data.length; i++){
-                    output.push(<Todo data={json.data[i]} />)
+                    output.push(<Todo data={json.data[i]} onChange={refresh} />)
                 }
                 setTodos(output)
             })
@@ -47,7 +51,7 @@ export default function Home(){
       async function addTodo(){
         if(!loading){
           setLoading(true);
-          fetch(process.env.REACT_APP_BACKEND_HOST + ':' + process.env.REACT_APP_BACKEND_PORT + '/create', {
+          fetch('http://localhost:3001/create', {
             method: 'POST',
             headers: {
               Accept: 'application/json',
