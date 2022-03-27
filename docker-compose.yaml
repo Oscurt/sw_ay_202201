@@ -1,0 +1,52 @@
+version: "3.8"
+services:
+  database:
+    restart: always
+    image: postgres:14.2-alpine3.15
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+    volumes:
+      - ./db/data/postgres:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+  backend:
+    depends_on:
+      - database
+    restart: always
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_HOST=database
+      - PORT=$BACKEND_PORT
+    volumes:
+      - ./backend/index.js:/home/node/index.js
+    ports:
+      - "$BACKEND_PORT:$BACKEND_PORT"
+  frontend:
+    depends_on:
+      - database
+      - backend
+    restart: always
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    env_file:
+      - .env
+    environment:
+      - REACT_APP_BACKEND_PORT=$BACKEND_PORT
+      - REACT_APP_BACKEND_HOST=backend
+      - PORT=$FRONTEND_PORT
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    ports:
+      - $FRONTEND_PORT:$FRONTEND_PORT
