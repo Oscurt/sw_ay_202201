@@ -15,7 +15,6 @@ services:
   backend:
     depends_on:
       - database
-      - sesion_api
     restart: always
     build:
       context: ./backend
@@ -62,27 +61,3 @@ services:
       - $NGINX_PORT:80
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-  redis:
-    restart: always
-    image: bitnami/redis:6.0.16
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-    volumes:
-      - ./redis/data:/data
-  sesion_api:
-    depends_on:
-      - redis
-    restart: always
-    build:
-      context: ./sesion_api
-      dockerfile: ./Dockerfile
-    env_file:
-      - .env
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_SECRET=$REDIS_SECRET
-      - SESION_API_PORT=$SESION_API_PORT
-    volumes:
-      - ./sesion_api/index.js:/home/node/index.js
-    ports:
-      - "$SESION_API_PORT:$SESION_API_PORT"
